@@ -1,0 +1,39 @@
+﻿@model IEnumerable<HaimDadon.PeopleManager.web.Models.Person>
+@{
+    ViewBag.Title = "Display";
+}
+
+<h1>Display</h1>
+
+<form method="get">
+    <input type="text" name="search" placeholder="Search by name" />
+    <input type="submit" value="Search" />
+</form>
+
+<table class="table mb-5 mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+            <th scope="col">Image</th>
+        </tr>
+    </thead>
+    @if (Model == null || !Model.Any())
+    {
+        <p>No people found.</p>
+    }
+    @foreach (var p in Model)
+    {
+        <tbody>
+            <tr>
+                <td>@p.FullName</td>
+                <td>@p.Phone</td>
+                <td>@p.Email</td>
+                <td><img src="@p.ImagePath" width="60" /></td>
+            </tr>
+        </tbody>
+    }
+</table>
+
+<a href="@Url.Action("ExportPdf")">Export to PDF</a>

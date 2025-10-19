@@ -1,0 +1,75 @@
+﻿@model HaimDadon.PeopleManager.web.Models.Person
+@{
+    ViewBag.Title = "Create";
+}
+
+<h1>Create Person</h1>
+<form id="PersonForm" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label>Full Name:</label>
+        @Html.TextBoxFor(model => model.FullName)
+        @Html.ValidationMessageFor(model => model.FullName,"",new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        @Html.Label("Email:")
+        @Html.TextBoxFor(model => model.Email,new { type = "email", required = "required" })
+        @Html.ValidationMessageFor(model => model.Email,"", new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        <label>Phone:</label>
+        @Html.TextBoxFor(model => model.Phone, new { type = "tel", required = "required", pattern = @"^05\d{8}$" })
+        @Html.ValidationMessageFor(model => model.Phone,"", new { @class = "text-danger" })
+    </div>
+    <div class="mb-3">
+        <label>Image Upload:</label>
+        @Html.TextBox("imageFile", null, new { type = "file", name = "imageFile", id = "imageFile", accept = ".png,.jpg,.jpeg" })
+        @Html.ValidationMessageFor(model => model.ImagePath,"", new { @class = "text-danger" })
+    </div>
+    <input type="submit" />
+</form>
+
+<span id="createStatus" class="status"></span>
+
+
+@section scripts{
+    <script>
+        function FormSuccessHandler({ IsSucceeded, message }) {
+            if (IsSucceeded) {
+                $("#createStatus").css("color", "green").text(message).show().delay(3500).fadeOut();
+                $("#PersonForm")[0].reset();
+            }
+            else
+                $("#createStatus").css("color", "red").text(message).show().delay(3500).fadeOut();
+        }
+
+        function FormFaildHandler(err) {
+            console.error("Error Post:", err);
+            $("#createStatus").css("color", "red").text("Server error").show().delay(3500).fadeOut();
+        }
+
+        $("#imageFile").on("change", function (event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const allowed = ["image/png", "image/jpeg"];
+            if (!allowed.includes(file.type)) {
+                $("#createStatus").css("color", "red").text("Only PNG or JPG files are allowed").show().delay(3500).fadeOut();
+                event.target.value = "";
+            }
+        })
+
+
+
+        $("#PersonForm").on("submit", function(event) {
+            event.preventDefault();
+            if (!event.target.checkValidity()) {
+                event.target.reportValidity();
+                return;
+            }
+            const formData = new FormData(event.target);
+            fetch("/People/Create", { method: "POST", body: formData })
+                .then(result => result.json())
+                .then(data => FormSuccessHandler(data))
+                .catch(err => FormFaildHandler(err))
+        });
+    </script>
+}
