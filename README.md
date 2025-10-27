@@ -2,7 +2,7 @@
   
 ## Overview
 This project was developed of **Company X** as part of a professional evealuation task.
-
+The goal was to **build a people management web application** using **ASP.NET** while demonstarting my
 
 ## Features
 - Clear bullet points of key features.
