@@ -1,6 +1,8 @@
 # Project Name
   
 ## Overview
+This project was developed of **Company X** as part of a professional evealuation task.
+
 
 ## Features
 - Clear bullet points of key features.
